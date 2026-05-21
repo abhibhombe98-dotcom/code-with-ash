@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ReWear — Thrift with Style</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="static/css/style.css"/>
+</head>
+<body>
+
+<!-- ══ NAVBAR ══════════════════════════════════════════════════ -->
+<nav>
+  <div class="nav-logo" onclick="showPage('home')">Re<span>Wear</span></div>
+
+  <div class="nav-search-wrap">
+    <input class="nav-search" id="nav-search-input" type="text" placeholder="Search vintage, denim, jackets…" oninput="handleSearch(this.value)"/>
+    <svg class="nav-search-icon" width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+  </div>
+
+  <div class="nav-actions">
+    <a onclick="showPage('home')"     id="nav-home"     class="nav-link active">Shop</a>
+    <a onclick="showPage('wishlist')" id="nav-wishlist" class="nav-link">
+      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+      <span class="wishlist-count" id="wishlist-count" style="display:none">0</span>
+    </a>
+    <a onclick="showPage('orders')"   id="nav-orders"   class="nav-link">Orders</a>
+    <button class="cart-btn" onclick="showPage('cart')">
+      <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18M16 10a4 4 0 01-8 0"/></svg>
+      Cart <span class="cart-count" id="cart-count">0</span>
+    </button>
+  </div>
+</nav>
+
+<!-- ══ HOME PAGE ═══════════════════════════════════════════════ -->
+<div id="page-home" class="page active">
+
+  <section class="hero">
+    <div class="hero-bg-text">REWEAR</div>
+    <div class="hero-content">
+      <div class="hero-text">
+        <p class="hero-eyebrow">✦ Curated Secondhand Fashion</p>
+        <h1>Second-Hand,<br><em>First Choice.</em></h1>
+        <p class="hero-sub">Discover pre-loved vintage &amp; thrift pieces — because great style shouldn't cost the earth.</p>
+        <div class="hero-btns">
+          <button class="btn-primary" onclick="document.getElementById('shop-section').scrollIntoView({behavior:'smooth'})">Browse Collection →</button>
+          <div class="hero-badges">
+            <span class="hbadge">♻ Eco</span>
+            <span class="hbadge">✦ Pre-loved</span>
+            <span class="hbadge">70% Off Retail</span>
+          </div>
+        </div>
+      </div>
+      <div class="hero-collage">
+        <div class="collage-main">
+          <img src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=700&q=85" alt="Fashion"/>
+          <div class="collage-label">New Arrivals ✦</div>
+        </div>
+        <div class="collage-side">
+          <div class="collage-sm"><img src="https://images.unsplash.com/photo-1475180098004-ca77a66827be?w=400&q=80" alt="Vintage"/></div>
+          <div class="collage-sm"><img src="https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=400&q=80" alt="Style"/></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="stats-bar">
+    <div class="stat"><span class="stat-n">500+</span><span class="stat-l">Happy Buyers</span></div>
+    <div class="stat-div"></div>
+    <div class="stat"><span class="stat-n">12</span><span class="stat-l">Curated Items</span></div>
+    <div class="stat-div"></div>
+    <div class="stat"><span class="stat-n">70%</span><span class="stat-l">Avg. Savings</span></div>
+    <div class="stat-div"></div>
+    <div class="stat"><span class="stat-n">Free</span><span class="stat-l">Shipping ₹1500+</span></div>
+  </div>
+
+  <section id="shop-section">
+    <div class="section-header">
+      <div>
+        <h2 class="section-title">Available Now</h2>
+        <p class="section-sub">Handpicked thrift finds — limited stock, grab them fast.</p>
+      </div>
+      <div class="shop-controls">
+        <div class="filter-tabs" id="filter-tabs">
+          <button class="filter-tab active" data-cat="all">All</button>
+          <button class="filter-tab" data-cat="tops">Tops</button>
+          <button class="filter-tab" data-cat="bottoms">Bottoms</button>
+          <button class="filter-tab" data-cat="outerwear">Outerwear</button>
+          <button class="filter-tab" data-cat="accessories">Accessories</button>
+        </div>
+        <select class="sort-select" id="sort-select" onchange="applySortFilter()">
+          <option value="default">Sort: Featured</option>
+          <option value="price_asc">Price: Low → High</option>
+          <option value="price_desc">Price: High → Low</option>
+          <option value="savings">Biggest Savings</option>
+          <option value="newest">Newest First</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Search results banner -->
+    <div class="search-banner" id="search-banner" style="display:none">
+      <span id="search-banner-text"></span>
+      <button onclick="clearSearch()">✕ Clear</button>
+    </div>
+
+    <div class="products-grid" id="products-grid">
+      <div class="loading-state"><div class="spinner"></div>Loading products…</div>
+    </div>
+  </section>
+
+  <div class="trust-strip">
+    <div class="trust-item"><span>🔍</span><span>Every Item Inspected</span></div>
+    <div class="trust-item"><span>📦</span><span>Carefully Packaged</span></div>
+    <div class="trust-item"><span>↩️</span><span>Easy Returns</span></div>
+    <div class="trust-item"><span>💬</span><span>Seller Verified</span></div>
+  </div>
+</div>
+
+<!-- ══ PRODUCT DETAIL PAGE ════════════════════════════════════ -->
+<div id="page-product" class="page">
+  <div class="container">
+    <button class="back-btn" onclick="showPage('home')">
+      <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Back to Shop
+    </button>
+    <div class="detail-grid" id="detail-content"></div>
+    <div id="related-section"></div>
+  </div>
+</div>
+
+<!-- ══ WISHLIST PAGE ══════════════════════════════════════════ -->
+<div id="page-wishlist" class="page">
+  <div class="container">
+    <h2 class="page-title">My Wishlist ❤️</h2>
+    <div class="products-grid" id="wishlist-grid">
+      <div class="loading-state"><div class="spinner"></div>Loading…</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CART PAGE ══════════════════════════════════════════════ -->
+<div id="page-cart" class="page">
+  <div class="container">
+    <h2 class="page-title">Your Cart 🛒</h2>
+    <div class="cart-layout">
+      <div id="cart-items-wrap"></div>
+      <div id="cart-sidebar"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CHECKOUT PAGE ══════════════════════════════════════════ -->
+<div id="page-checkout" class="page">
+  <div class="container">
+    <button class="back-btn" onclick="showPage('cart')">
+      <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Back to Cart
+    </button>
+    <h2 class="page-title">Checkout</h2>
+    <div class="checkout-layout">
+      <div class="checkout-form-box">
+        <p class="form-section-title">
+          <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          Delivery Details
+        </p>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>First Name <span class="req">*</span></label>
+            <input type="text" id="f-fname" placeholder="Riya"/>
+          </div>
+          <div class="form-group">
+            <label>Last Name</label>
+            <input type="text" id="f-lname" placeholder="Sharma"/>
+          </div>
+          <div class="form-group">
+            <label>Phone <span class="req">*</span></label>
+            <input type="tel" id="f-phone" placeholder="+91 9876543210"/>
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="f-email" placeholder="riya@email.com"/>
+          </div>
+          <div class="form-group full">
+            <label>Delivery Address <span class="req">*</span></label>
+            <textarea id="f-address" placeholder="Flat / House no., Street, Area, City — Pincode"></textarea>
+          </div>
+          <div class="form-group full">
+            <label>Order Notes (optional)</label>
+            <input type="text" id="f-notes" placeholder="Any special instructions…"/>
+          </div>
+        </div>
+
+        <p class="form-section-title" style="margin-top:28px">
+          <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          Payment Method
+        </p>
+        <div class="payment-options">
+          <div class="pay-opt selected" data-pay="cod"><span class="pay-icon">💵</span><span class="pay-label">Cash on Delivery</span></div>
+          <div class="pay-opt" data-pay="upi"><span class="pay-icon">📱</span><span class="pay-label">UPI / GPay</span></div>
+          <div class="pay-opt" data-pay="card"><span class="pay-icon">💳</span><span class="pay-label">Card</span></div>
+        </div>
+
+        <button class="order-btn" onclick="placeOrder()">Place Order &nbsp;✦</button>
+      </div>
+      <div id="checkout-summary"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ORDERS PAGE ════════════════════════════════════════════ -->
+<div id="page-orders" class="page">
+  <div class="container">
+    <h2 class="page-title">My Orders 📦</h2>
+    <div id="orders-list"></div>
+  </div>
+</div>
+
+<!-- ══ SUCCESS PAGE ═══════════════════════════════════════════ -->
+<div id="page-success" class="page">
+  <div class="success-wrap">
+    <div class="success-ring"><div class="success-icon">🎉</div></div>
+    <h2>Order Confirmed!</h2>
+    <p id="success-msg">Thank you! Your thrift finds are on their way.</p>
+    <div class="success-order-id" id="success-order-id"></div>
+    <div class="success-actions">
+      <button class="btn-primary" onclick="showPage('orders')" style="padding:13px 28px">View My Orders</button>
+      <button class="btn-ghost-dark" onclick="showPage('home')">Continue Shopping</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast">
+  <span class="toast-dot" id="toast-dot"></span>
+  <span id="toast-msg">Added to cart!</span>
+</div>
+
+<script src="static/css/js/app.js"></script>
+</body>
+</html>
